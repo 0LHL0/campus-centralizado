@@ -1,6 +1,6 @@
-Campus Centralizado
+EduCore
 
-Campus Centralizado is a web platform designed to centralize academic and institutional information for educational institutions such as schools and colleges.
+EduCore is a web platform designed to centralize academic and institutional information for educational institutions such as schools and colleges.
 
 ---
 
