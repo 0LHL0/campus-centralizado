@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('cycles', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('institutions_id')
+            $table->foreignId('institution_id')
                   ->constrained()
                   ->cascadeOnDelete();
 
