@@ -55,7 +55,7 @@ class InstitutionController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:institutions,email,' . $institution->id,
             'phone' => 'required|string',
-            'address' => 'nulllable|string|max:255']);
+            'address' => 'nullable|string|max:255']);
 
         $institution->update($request->all());
 
