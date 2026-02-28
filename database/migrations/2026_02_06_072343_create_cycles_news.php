@@ -1,36 +1,59 @@
+
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+
 use Illuminate\Database\Schema\Blueprint;
+
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
+
 {
-    /**
-     * Run the migrations.
-     */
+
     public function up(): void
+
     {
-        Schema::create('cycles_news', function (Blueprint $table) {
+
+        // cycle_news es la tabla pivote que conecta ciclos con noticias
+
+        // Laravel espera el nombre en singular y orden alfabético: cycle_news
+
+        Schema::create('cycle_news', function (Blueprint $table) {
+
             $table->id();
 
-            $table->foreignId('cycles_id')
+            // cycle_id apunta a la tabla cycles
+
+            $table->foreignId('cycle_id')
+
                   ->constrained()
+
                   ->cascadeOnDelete();
 
+            // news_id apunta a la tabla news
+
             $table->foreignId('news_id')
+
                   ->constrained()
+
                   ->cascadeOnDelete();
 
             $table->timestamps();
+
         });
+
     }
 
-    /**
-     * Reverse the migrations.
-     */
+
+
     public function down(): void
+
     {
-        Schema::dropIfExists('institution_news');
+
+        Schema::dropIfExists('cycle_news');
+
     }
+
 };
+

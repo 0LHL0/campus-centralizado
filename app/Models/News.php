@@ -17,6 +17,6 @@ class News extends Model
     //Noticias pueden pertenecer a varios ciclos
 
     public function cycles() {
-        return $this->belongsTo(Cycle::class);
+        return $this->belongsToMany(Cycle::class);
     }
 }
