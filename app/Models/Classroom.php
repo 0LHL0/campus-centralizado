@@ -11,16 +11,21 @@ class Classroom extends Model
 
     protected $fillable = [
         'name',
-        'cycle_id'
+        'cycle_id',
+        'grade',
+        'section',
+        'capacity'
     ];
 
-    //Cada aula pertenece a un ciclo
-    public function cycle() {
+    // Cada aula pertenece a un ciclo
+    public function cycle()
+    {
         return $this->belongsTo(Cycle::class);
     }
 
-    //Un aula tiene muchos estudiantes
-    public function students(){
+    // Un aula tiene muchos estudiantes
+    public function students()
+    {
         return $this->hasMany(Student::class);
     }
 }

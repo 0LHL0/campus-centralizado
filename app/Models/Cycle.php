@@ -14,18 +14,19 @@ class Cycle extends Model
         'institution_id'
     ];
 
-    //Cada ciclo pertenece a una institucion 
-    public function institution() {
+    public function institution()
+    {
         return $this->belongsTo(Institution::class);
     }
 
-    //Un ciclo tiene muchas aulas
-    public function classroom(){
+    // Cambiamos a classrooms() plural para consistencia
+    public function classrooms()
+    {
         return $this->hasMany(Classroom::class);
     }
 
-    //Un ciclo puede tener muchas noticias 
-    public function news(){
-        return $this->belongsToMany(News::class);
+    public function news()
+    {
+        return $this->belongsToMany(News::class, 'cycle_news');
     }
 }
