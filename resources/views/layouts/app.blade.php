@@ -27,14 +27,14 @@
         Inicio
     </a>
 
-    <a href="#" class="nav-item">
+    <a href="{{ route('news.index') }}" class="nav-item {{ request()->routeIs('news.*') ? 'active' : '' }}">
         <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
         </svg>
         Noticias
     </a>
 
-    <a href="#" class="nav-item">
+    <a href="{{ route('messages.index') }}" class="nav-item {{ request()->routeIs('messages.*') ? 'active' : '' }}">
         <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
         </svg>
@@ -81,19 +81,39 @@
         Configuración
     </a>
 
-    {{-- User footer --}}
-    <div class="sidebar-footer">
-        <div class="user-card">
-            <div class="user-avatar">AD</div>
+    {{-- User footer con dropdown --}}
+    <div class="sidebar-footer" style="position:relative;">
+        <div class="user-card" onclick="toggleUserMenu()" style="cursor:pointer;">
+            <div class="user-avatar">{{ strtoupper(substr(Auth::user()->name, 0, 2)) }}</div>
             <div>
-                <div class="user-name">Admin EduCore</div>
-                <div class="user-role">Administrador</div>
+                <div class="user-name">{{ Auth::user()->name }}</div>
+                <div class="user-role">{{ Auth::user()->role->name }}</div>
             </div>
             <svg style="margin-left:auto;width:14px;height:14px;color:rgba(255,255,255,0.3);" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l4-4 4 4m0 6l-4 4-4-4"/>
             </svg>
         </div>
+        <div id="user-menu" style="display:none; position:absolute; bottom:72px; left:12px; right:12px; background:#1A2B3C; border-radius:12px; border:1px solid rgba(255,255,255,0.08); overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,0.3);">
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" style="display:flex; align-items:center; gap:10px; padding:12px 16px; color:#FCA5A5; background:transparent; border:none; cursor:pointer; font-size:0.83rem; font-family:'Plus Jakarta Sans',sans-serif; width:100%;">
+                    🚪 Cerrar sesión
+                </button>
+            </form>
+        </div>
     </div>
+    <script>
+        function toggleUserMenu() {
+            const menu = document.getElementById('user-menu');
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+        }
+        document.addEventListener('click', function(e) {
+            const footer = document.querySelector('.sidebar-footer');
+            if (footer && !footer.contains(e.target)) {
+                document.getElementById('user-menu').style.display = 'none';
+            }
+        });
+    </script>
 </aside>
 
 {{-- ══════════════════════════════════ MAIN ══════════════════════════════════ --}}
@@ -107,7 +127,7 @@
             <svg style="width:15px;height:15px;color:#94A3B8;flex-shrink:0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
             </svg>
-            <input type="text" placeholder="Buscar noticias, alumnos..."/>
+            <form action="{{ route('search') }}" method="GET" style="display:flex;align-items:center;gap:8px;width:100%;"><input type="text" name="q" value="{{ request('q') }}" placeholder="Buscar noticias, alumnos..." style="border:none;outline:none;background:transparent;font-size:0.85rem;color:var(--text-primary);width:100%;font-family:'Plus Jakarta Sans',sans-serif;"/></form>
         </div>
 
         <div class="topbar-btn">

@@ -8,18 +8,17 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('news', function (Blueprint $table) {
+        // Tabla pivote que conecta mensajes con ciclos
+        Schema::create('message_cycle', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('content');
-            
-            // Sin cycle_id directo — la relación va por la tabla pivote cycle_news
+            $table->foreignId('message_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('cycle_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('news');
+        Schema::dropIfExists('message_cycle');
     }
 };

@@ -8,16 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class Message extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
         'title',
-        'body',
-        'user_id'
+        'content',
+        'recipient_type',
+        'grade',
+        'sent_at'
     ];
 
-
-    //Un mensaje pertence a un usuario
-    public function User() {
-        return $this->belongsTo(User::class);
+    // Si el mensaje es por ciclo, tiene muchos ciclos vinculados
+    public function cycles()
+    {
+        return $this->belongsToMany(Cycle::class);
     }
 }
