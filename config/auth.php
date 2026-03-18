@@ -40,6 +40,11 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        // Guard para la API — usa tokens de Sanctum en vez de sesión
+        'api' => [
+            'driver'   => 'sanctum',
+            'provider' => 'users',
+        ],
     ],
 
     /*

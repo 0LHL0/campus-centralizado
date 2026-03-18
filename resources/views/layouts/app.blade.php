@@ -147,6 +147,11 @@
 
     {{-- Page Content --}}
     <main class="content">
+        @if(session('success'))
+        <div style="background:#FEE2E2; border:1px solid #FCA5A5; color:#B91C1C; padding:12px 18px; border-radius:10px; margin-bottom:20px; font-size:0.85rem;">
+            {{ session('error') }}
+        </div>
+        @endif
         @yield('content')
     </main>
 
