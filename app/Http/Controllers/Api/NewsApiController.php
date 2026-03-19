@@ -3,26 +3,24 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\NewsResource;
 use App\Models\News;
 use Illuminate\Http\Request;
 
 class NewsApiController extends Controller
 {
-    // GET /api/news
     public function index()
     {
         $news = News::with('cycles.institution')->get();
-        return response()->json($news, 200);
+        return NewsResource::collection($news);
     }
 
-    // GET /api/news/{id}
     public function show(News $news)
     {
         $news->load('cycles.institution');
-        return response()->json($news, 200);
+        return new NewsResource($news);
     }
 
-    // POST /api/news
     public function store(Request $request)
     {
         $request->validate([
@@ -38,11 +36,9 @@ class NewsApiController extends Controller
         ]);
 
         $newsItem->cycles()->sync($request->cycles);
-
-        return response()->json($newsItem->load('cycles'), 201);
+        return new NewsResource($newsItem->load('cycles.institution'));
     }
 
-    // PUT /api/news/{id}
     public function update(Request $request, News $news)
     {
         $request->validate([
@@ -58,14 +54,12 @@ class NewsApiController extends Controller
         ]);
 
         $news->cycles()->sync($request->cycles);
-
-        return response()->json($news->load('cycles'), 200);
+        return new NewsResource($news->load('cycles.institution'));
     }
 
-    // DELETE /api/news/{id}
     public function destroy(News $news)
     {
         $news->delete();
-        return response()->json(['message' => 'Noticia eliminada correctamente.'], 200);
+        return response()->json(['mensaje' => 'Noticia eliminada correctamente.'], 200);
     }
 }

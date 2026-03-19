@@ -3,29 +3,25 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\StudentResource;
 use App\Models\Student;
 use Illuminate\Http\Request;
 
 class StudentApiController extends Controller
 {
-    // GET /api/students — lista todos los estudiantes
     public function index()
     {
-        // Cargamos la cadena completa en una sola consulta
         $students = Student::with('classroom.cycle.institution')->get();
-
-        return response()->json($students, 200);
+        // StudentResource::collection formatea toda la colección
+        return StudentResource::collection($students);
     }
 
-    // GET /api/students/{id} — detalle de un estudiante
     public function show(Student $student)
     {
         $student->load('classroom.cycle.institution');
-
-        return response()->json($student, 200);
+        return new StudentResource($student);
     }
 
-    // POST /api/students — crear estudiante
     public function store(Request $request)
     {
         $request->validate([
@@ -36,11 +32,9 @@ class StudentApiController extends Controller
         ]);
 
         $student = Student::create($request->all());
-
-        return response()->json($student, 201); // 201 = Creado
+        return new StudentResource($student);
     }
 
-    // PUT /api/students/{id} — actualizar estudiante
     public function update(Request $request, Student $student)
     {
         $request->validate([
@@ -51,17 +45,12 @@ class StudentApiController extends Controller
         ]);
 
         $student->update($request->all());
-
-        return response()->json($student, 200);
+        return new StudentResource($student);
     }
 
-    // DELETE /api/students/{id} — eliminar estudiante
     public function destroy(Student $student)
     {
         $student->delete();
-
-        return response()->json([
-            'message' => 'Estudiante eliminado correctamente.'
-        ], 200);
+        return response()->json(['mensaje' => 'Estudiante eliminado correctamente.'], 200);
     }
 }

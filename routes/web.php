@@ -18,31 +18,19 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Rutas protegidas — requieren estar autenticado
 Route::middleware('auth')->group(function () {
-
-    // Inicio y búsqueda — todos los roles
     Route::get('/', [HomeController::class, 'index'])->name('home');
-    Route::get('/search', [SearchController::class, 'index'])->name('search');
 
-    // Instituciones — solo admin
-    Route::resource('institutions', InstitutionController::class)
-         ->middleware('role:admin');
+    Route::resource('institutions', InstitutionController::class)->middleware('role:admin'); // Solo admin puede gestionar instituciones
 
-    // Ciclos — solo admin
-    Route::resource('cycles', CycleController::class)
-         ->middleware('role:admin');
+    Route::resource('cycles', CycleController::class);
 
-    // Salones — admin y profesor
-    Route::resource('classrooms', ClassroomController::class)
-         ->middleware('role:admin,profesor');
+    Route::resource('classrooms', ClassroomController::class);
 
-    // Estudiantes — admin y profesor
-    Route::resource('students', StudentController::class)
-         ->middleware('role:admin,profesor');
+    Route::resource('students', StudentController::class)->middleware('role:admin,teacher'); // Solo admin y teacher pueden gestionar estudiantes
 
-    // Noticias — admin y profesor
-    Route::resource('news', NewsController::class)
-         ->middleware('role:admin,profesor');
+    Route::resource('news', NewsController::class);
 
-    // Mensajes — todos los roles
     Route::resource('messages', MessageController::class);
+    
+    Route::get('/search', [SearchController::class, 'index'])->name('search');
 });
