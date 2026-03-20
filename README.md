@@ -112,7 +112,7 @@ This project is structured to showcase real-world backend development skills and
 👨‍💻 Author
 
 Leo Hernández
-Civil Engineer transitioning into Web Development
+Civil Engineer transitioning into Software Development
 
 📌 Notes
 
