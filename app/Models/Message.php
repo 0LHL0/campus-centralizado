@@ -20,6 +20,7 @@ class Message extends Model
     // Si el mensaje es por ciclo, tiene muchos ciclos vinculados
     public function cycles()
     {
-        return $this->belongsToMany(Cycle::class);
+        // Especificamos el nombre de la tabla pivote manualmente
+        return $this->belongsToMany(Cycle::class, 'message_cycle');
     }
 }

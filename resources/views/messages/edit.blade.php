@@ -35,14 +35,53 @@
                            onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='#E2E8F0'">
                 </div>
 
-                <div style="margin-bottom:28px;">
+                <div style="margin-bottom:16px;">
                     <label style="display:block; font-size:0.8rem; font-weight:600; color:var(--text-primary); margin-bottom:6px;">Mensaje <span style="color:red;">*</span></label>
-                    <textarea name="content" rows="6"
+                    <textarea name="content" rows="5"
                               style="width:100%; padding:10px 14px; border-radius:10px; border:1px solid #E2E8F0; font-size:0.85rem; font-family:'Plus Jakarta Sans',sans-serif; color:var(--text-primary); outline:none; resize:vertical;"
                               onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='#E2E8F0'">{{ old('content', $message->content) }}</textarea>
                 </div>
 
-                <div style="display:flex; gap:12px;">
+                <div style="margin-bottom:16px;">
+                    <label style="display:block; font-size:0.8rem; font-weight:600; color:var(--text-primary); margin-bottom:10px;">Dirigido a <span style="color:red;">*</span></label>
+                    <div style="display:flex; gap:12px;">
+                        <label style="display:flex; align-items:center; gap:8px; padding:10px 16px; border-radius:10px; border:2px solid #E2E8F0; cursor:pointer; flex:1;" id="label-cycle">
+                            <input type="radio" name="recipient_type" value="cycle"
+                                   {{ old('recipient_type', $message->recipient_type) === 'cycle' ? 'checked' : '' }}
+                                   onchange="toggleRecipient('cycle')" style="accent-color:var(--accent);">
+                            <span style="font-size:0.85rem; font-weight:500; color:var(--text-primary);">📋 Por ciclo</span>
+                        </label>
+                        <label style="display:flex; align-items:center; gap:8px; padding:10px 16px; border-radius:10px; border:2px solid #E2E8F0; cursor:pointer; flex:1;" id="label-grade">
+                            <input type="radio" name="recipient_type" value="grade"
+                                   {{ old('recipient_type', $message->recipient_type) === 'grade' ? 'checked' : '' }}
+                                   onchange="toggleRecipient('grade')" style="accent-color:var(--accent);">
+                            <span style="font-size:0.85rem; font-weight:500; color:var(--text-primary);">🎓 Por grado</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div id="field-cycle" style="margin-bottom:16px;">
+                    <label style="display:block; font-size:0.8rem; font-weight:600; color:var(--text-primary); margin-bottom:6px;">Ciclos <span style="color:red;">*</span></label>
+                    <p style="font-size:0.75rem; color:var(--text-muted); margin:0 0 8px;">Mantené Ctrl presionado para seleccionar varios</p>
+                    <select name="cycles[]" multiple
+                            style="width:100%; padding:10px 14px; border-radius:10px; border:1px solid #E2E8F0; font-size:0.85rem; font-family:'Plus Jakarta Sans',sans-serif; color:var(--text-primary); outline:none; background:white; height:130px;">
+                        @foreach($cycles as $cycle)
+                            <option value="{{ $cycle->id }}"
+                                {{ in_array($cycle->id, old('cycles', $message->cycles->pluck('id')->toArray())) ? 'selected' : '' }}>
+                                {{ $cycle->name }} — {{ $cycle->institution->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div id="field-grade" style="margin-bottom:16px; display:none;">
+                    <label style="display:block; font-size:0.8rem; font-weight:600; color:var(--text-primary); margin-bottom:6px;">Grado <span style="color:red;">*</span></label>
+                    <input type="text" name="grade" value="{{ old('grade', $message->grade) }}" placeholder="Ej: Sétimo, Primero, Kinder..."
+                           style="width:100%; padding:10px 14px; border-radius:10px; border:1px solid #E2E8F0; font-size:0.85rem; font-family:'Plus Jakarta Sans',sans-serif; color:var(--text-primary); outline:none;"
+                           onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='#E2E8F0'">
+                </div>
+
+                <div style="display:flex; gap:12px; margin-top:12px;">
                     <button type="submit" style="padding:11px 28px; background:var(--accent); color:#fff; border:none; border-radius:10px; font-size:0.88rem; font-weight:600; cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif;">Guardar cambios</button>
                     <a href="{{ route('messages.index') }}" style="padding:11px 28px; background:var(--surface); color:var(--text-secondary); border:1px solid #E2E8F0; border-radius:10px; font-size:0.88rem; font-weight:500; text-decoration:none;">Cancelar</a>
                 </div>
@@ -50,5 +89,31 @@
         </div>
     </div>
 </div>
+
+<script>
+    function toggleRecipient(type) {
+        const fieldCycle = document.getElementById('field-cycle');
+        const fieldGrade = document.getElementById('field-grade');
+        const labelCycle = document.getElementById('label-cycle');
+        const labelGrade = document.getElementById('label-grade');
+
+        if (type === 'cycle') {
+            fieldCycle.style.display = 'block';
+            fieldGrade.style.display = 'none';
+            labelCycle.style.borderColor = 'var(--accent)';
+            labelGrade.style.borderColor = '#E2E8F0';
+        } else {
+            fieldCycle.style.display = 'none';
+            fieldGrade.style.display = 'block';
+            labelCycle.style.borderColor = '#E2E8F0';
+            labelGrade.style.borderColor = 'var(--accent)';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const selected = document.querySelector('input[name="recipient_type"]:checked');
+        if (selected) toggleRecipient(selected.value);
+    });
+</script>
 
 @endsection
