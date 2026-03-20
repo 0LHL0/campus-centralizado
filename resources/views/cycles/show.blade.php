@@ -59,7 +59,7 @@
             <div style="width:48px; height:48px; border-radius:14px; background:#D1FAE5; display:flex; align-items:center; justify-content:center; font-size:1.3rem; flex-shrink:0;">🏫</div>
             <div>
                 {{-- count() cuenta cuántos salones tiene este ciclo --}}
-                <div style="font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:700; color:var(--text-primary); line-height:1;">{{ $cycle->classroom->count() }}</div>
+                <div style="font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:700; color:var(--text-primary); line-height:1;">{{ $cycle->classrooms->count() }}</div>
                 <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:2px;">Salones registrados</div>
             </div>
         </div>

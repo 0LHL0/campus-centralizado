@@ -10,27 +10,28 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\ConfigController;
+use App\Http\Controllers\ProfileController;
 
-// Rutas de autenticación — accesibles sin login
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Rutas protegidas — requieren estar autenticado
 Route::middleware('auth')->group(function () {
+
     Route::get('/', [HomeController::class, 'index'])->name('home');
-
-    Route::resource('institutions', InstitutionController::class)->middleware('role:admin'); // Solo admin puede gestionar instituciones
-
-    Route::resource('cycles', CycleController::class);
-
-    Route::resource('classrooms', ClassroomController::class);
-
-    Route::resource('students', StudentController::class)->middleware('role:admin,teacher'); // Solo admin y teacher pueden gestionar estudiantes
-
-    Route::resource('news', NewsController::class);
-
-    Route::resource('messages', MessageController::class);
-    
     Route::get('/search', [SearchController::class, 'index'])->name('search');
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+
+    Route::get('/config', [ConfigController::class, 'index'])->name('config.index')->middleware('role:admin');
+
+    Route::resource('institutions', InstitutionController::class)->middleware('role:admin');
+    Route::resource('cycles', CycleController::class)->middleware('role:admin');
+    Route::resource('classrooms', ClassroomController::class)->middleware('role:admin,profesor');
+    Route::resource('students', StudentController::class)->middleware('role:admin,profesor');
+    Route::resource('news', NewsController::class)->middleware('role:admin,profesor');
+    Route::resource('messages', MessageController::class);
 });

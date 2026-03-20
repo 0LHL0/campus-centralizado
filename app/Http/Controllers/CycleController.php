@@ -67,6 +67,7 @@ class CycleController extends Controller
 
     {
 
+        $cycle->load('institution', 'classrooms'); // Cargamos la institución relacionada
         return view('cycles.show', compact('cycle'));
 
     }

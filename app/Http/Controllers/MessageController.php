@@ -44,6 +44,7 @@ class MessageController extends Controller
 
     public function edit(Message $message)
     {
+        $cycles = Cycle::with('institution')->orderBy('name')->get();
         return view('messages.edit', compact('message'));
     }
 
