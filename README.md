@@ -109,7 +109,6 @@ Emphasis on scalability and real-world use cases
 
 This project is structured to showcase real-world backend development skills and best practices.
 
-serve
 👨‍💻 Author
 
 Leo Hernández
